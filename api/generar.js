@@ -50,9 +50,11 @@ Hazla persuasiva, clara y lista para publicar.`
     }
 
     const texto =
-      datos.output_text ||
-      datos.output?.[0]?.content?.[0]?.text ||
-      "No se recibió contenido.";
+  datos.output
+    ?.flatMap(item => item.content || [])
+    ?.find(content => content.type === "output_text")
+    ?.text ||
+  "No se recibió contenido.";
 
     return res.status(200).json({
       resultado: texto
