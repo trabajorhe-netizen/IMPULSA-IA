@@ -180,58 +180,42 @@
 </footer>
 
 <script>
-
-function generarCampana() {
-
-  const promocion =
-    document.getElementById("promocion").value.trim();
-
-  const resultado =
-    document.getElementById("resultado");
+async function generarCampana() {
+  const promocion = document.getElementById("promocion").value.trim();
+  const resultado = document.getElementById("resultado");
 
   if (!promocion) {
-
     resultado.style.display = "block";
-
     resultado.textContent =
       "Escribe primero qué producto, servicio o promoción quieres anunciar.";
-
     return;
   }
 
   resultado.style.display = "block";
+  resultado.textContent = "✨ IMPULSA IA está creando tu campaña...";
 
-  resultado.textContent =
-`🚀 CAMPAÑA GENERADA POR IMPULSA IA
+  try {
+    const respuesta = await fetch("/api/generar", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ promocion })
+    });
 
-🎯 PROMOCIÓN
+    const datos = await respuesta.json();
 
-${promocion}
+    if (!respuesta.ok) {
+      throw new Error(datos.error || "No se pudo generar la campaña.");
+    }
 
-📢 TEXTO PUBLICITARIO
-
-¡Llegó el momento de aprovechar esta oportunidad!
-
-${promocion}
-
-Descubre una oferta creada para atraer la atención de tus clientes y convertir interés en ventas.
-
-📱 REDES SOCIALES
-
-✨ Una oportunidad que no querrás dejar pasar.
-
-${promocion}
-
-Conoce todos los detalles y aprovecha la promoción.
-
-#Oferta #Promoción #ImpulsaIA
-
-💡 LLAMADA A LA ACCIÓN
-
-👉 Descubre la promoción ahora.`;
-
+    resultado.textContent = datos.resultado;
+  } catch (error) {
+    console.error(error);
+    resultado.textContent =
+      "No fue posible generar la campaña. Inténtalo nuevamente.";
+  }
 }
-
 </script>
 
 </body>
