@@ -209,7 +209,12 @@ async function generarCampana() {
       throw new Error(datos.error || "No se pudo generar la campaña.");
     }
 
-    resultado.textContent = datos.resultado;
+    const formateado = datos.resultado
+  .replace(/^##\s*(.+)$/gm, "<h3>$1</h3>")
+  .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+  .replace(/\n/g, "<br>");
+
+resultado.innerHTML = formateado;
   } catch (error) {
     console.error(error);
     resultado.textContent =
