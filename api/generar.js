@@ -53,7 +53,7 @@ Describe una imagen publicitaria profesional que acompañe la campaña: sujeto p
 
 No inventes precios, fechas, ubicaciones, descuentos, condiciones ni características que el usuario no haya proporcionado.
 Mantén toda la información proporcionada por el usuario.
-Haz que cada sección sea útil, específica y lista para utilizar.
+Haz que cada sección sea útil, específica y lista para utilizar.`
         })
       }
     );
