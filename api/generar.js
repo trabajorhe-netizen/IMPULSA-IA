@@ -74,9 +74,45 @@ Haz que cada sección sea útil, específica y lista para utilizar.`
     ?.text ||
   "No se recibió contenido.";
 
+    const imagenRespuesta = await fetch(
+  "https://api.openai.com/v1/images/generations",
+  {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`
+    },
+    body: JSON.stringify({
+      model: "gpt-image-2",
+      prompt: `Crea una imagen publicitaria profesional para esta campaña de marketing:
+
+${promocion}
+
+Usa como dirección creativa la propuesta visual incluida en esta campaña:
+
+${texto}
+
+La imagen debe tener calidad publicitaria profesional, composición atractiva, iluminación cuidada y ser apropiada para redes sociales.`,
+      size: "1024x1024"
+    })
+  }
+);
+
+const imagenDatos = await imagenRespuesta.json();
+
+if (!imagenRespuesta.ok) {
+  console.error("Error generando imagen:", imagenDatos);
+  return res.status(500).json({
+    error: "La campaña se creó, pero no fue posible generar la imagen."
+  });
+}
+
+const imagenBase64 = imagenDatos.data?.[0]?.b64_json || null;
+
     return res.status(200).json({
-      resultado: texto
-    });
+  resultado: texto,
+  imagen: imagenBase64
+});
 
   } catch (error) {
     console.error(error);
