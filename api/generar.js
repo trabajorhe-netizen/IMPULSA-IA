@@ -28,14 +28,32 @@ Crea una campaña publicitaria profesional en español para:
 
 ${promocion}
 
-Entrega:
-1. Título de campaña
-2. Texto publicitario
-3. Publicación para redes sociales
-4. Cinco hashtags
-5. Llamada a la acción
+Entrega exactamente estas 7 secciones, usando cada encabezado con ###:
 
-Hazla persuasiva, clara y lista para publicar.`
+### 1. Título de campaña
+Crea un título breve, atractivo y memorable.
+
+### 2. Texto publicitario
+Escribe un texto persuasivo que explique claramente la promoción y sus beneficios.
+
+### 3. Publicación para Instagram y Facebook
+Crea una publicación atractiva y lista para publicar en redes sociales. Usa emojis de manera moderada.
+
+### 4. Mensaje para WhatsApp
+Escribe un mensaje breve, natural y persuasivo que el negocio pueda enviar directamente a sus clientes por WhatsApp.
+
+### 5. Hashtags
+Genera entre 5 y 8 hashtags relevantes para el negocio, producto, promoción y ubicación cuando corresponda.
+
+### 6. Llamada a la acción
+Escribe una llamada a la acción clara, breve y convincente.
+
+### 7. Propuesta visual
+Describe una imagen publicitaria profesional que acompañe la campaña: sujeto principal, composición, ambiente, iluminación, colores, texto sugerido dentro de la imagen y formato recomendado para redes sociales.
+
+No inventes precios, fechas, ubicaciones, descuentos, condiciones ni características que el usuario no haya proporcionado.
+Mantén toda la información proporcionada por el usuario.
+Haz que cada sección sea útil, específica y lista para utilizar.
         })
       }
     );
