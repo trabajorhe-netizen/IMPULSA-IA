@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+
   <title>IMPULSA IA</title>
 
   <style>
@@ -283,7 +284,6 @@ async function generarCampana() {
       "Escribe primero qué producto, servicio o promoción quieres anunciar.";
     return;
   }
-
   resultado.style.display = "block";
   resultado.textContent = "✨ IMPULSA IA está creando tu campaña...";
 
@@ -353,6 +353,23 @@ bloques.forEach(bloque => {
   tarjeta.appendChild(boton);
   grid.appendChild(tarjeta);
 });
+
+    if (datos.imagen) {
+  const tarjetaImagen = document.createElement("div");
+  tarjetaImagen.className = "resultado-card";
+  tarjetaImagen.style.gridColumn = "1 / -1";
+
+  tarjetaImagen.innerHTML = `
+    <h3>8. Imagen publicitaria generada</h3>
+    <img
+      src="data:image/png;base64,${datos.imagen}"
+      alt="Imagen publicitaria generada por IMPULSA IA"
+      style="width:100%; max-width:1024px; display:block; margin:20px auto 0; border-radius:14px;"
+    >
+  `;
+
+  grid.appendChild(tarjetaImagen);
+}
   } catch (error) {
     console.error(error);
     resultado.textContent =
