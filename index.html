@@ -328,6 +328,9 @@ bloques.forEach(bloque => {
 
   const tarjeta = document.createElement("div");
   tarjeta.className = "resultado-card";
+  if (titulo.startsWith("7.")) {
+  tarjeta.style.gridColumn = "1 / -1";
+}
 
   tarjeta.innerHTML = `
     <h3>${escaparHTML(titulo)}</h3>
