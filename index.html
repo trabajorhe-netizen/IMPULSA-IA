@@ -369,6 +369,14 @@ bloques.forEach(bloque => {
       alt="Imagen publicitaria generada por IMPULSA IA"
       style="width:100%; max-width:1024px; display:block; margin:20px auto 0; border-radius:14px;"
     >
+    <a
+  href="data:image/png;base64,${datos.imagen}"
+  download="IMPULSA-IA-campana.png"
+  class="copiar-btn"
+  style="display:inline-block; text-decoration:none; margin-top:10px;"
+>
+  ⬇ Descargar imagen
+</a>
   `;
 
   grid.appendChild(tarjetaImagen);
