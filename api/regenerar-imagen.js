@@ -6,7 +6,7 @@ export default async function handler(req, res) {
   try {
     const { promocion, propuestaVisual } = req.body || {};
 
-    if (!promocion) {
+ if (!promocion && !propuestaVisual) {
       return res.status(400).json({
         error: "No se recibió la información de la campaña."
       });
