@@ -381,9 +381,60 @@ bloques.forEach(bloque => {
 >
   ⬇ Descargar imagen
 </a>
+<button
+  id="regenerarImagenBtn"
+  class="copiar-btn"
+  style="margin-left:10px;"
+>
+  🔄 Regenerar imagen
+</button>
   `;
 
   grid.appendChild(tarjetaImagen);
+      const regenerarBtn = tarjetaImagen.querySelector("#regenerarImagenBtn");
+
+regenerarBtn.addEventListener("click", async () => {
+  const textoOriginal = regenerarBtn.textContent;
+  regenerarBtn.disabled = true;
+  regenerarBtn.textContent = "⏳ Generando nueva imagen...";
+
+  try {
+    const respuestaImagen = await fetch("/api/regenerar-imagen", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        promocion: promocion.value,
+        propuestaVisual: datos.resultado
+      })
+    });
+
+    const nuevaImagen = await respuestaImagen.json();
+
+    if (!respuestaImagen.ok || !nuevaImagen.imagen) {
+      throw new Error(nuevaImagen.error || "No fue posible regenerar la imagen.");
+    }
+
+    const img = tarjetaImagen.querySelector("img");
+    const enlaceDescarga = tarjetaImagen.querySelector("a");
+
+    img.src = `data:image/png;base64,${nuevaImagen.imagen}`;
+    enlaceDescarga.href = `data:image/png;base64,${nuevaImagen.imagen}`;
+
+    regenerarBtn.textContent = "✓ Nueva imagen generada";
+
+    setTimeout(() => {
+      regenerarBtn.textContent = textoOriginal;
+      regenerarBtn.disabled = false;
+    }, 2000);
+
+  } catch (error) {
+    console.error(error);
+    regenerarBtn.textContent = "⚠️ Inténtalo nuevamente";
+    regenerarBtn.disabled = false;
+  }
+});
 }
   } catch (error) {
     console.error(error);
