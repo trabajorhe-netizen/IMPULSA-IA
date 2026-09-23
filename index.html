@@ -405,7 +405,7 @@ regenerarBtn.addEventListener("click", async () => {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        promocion: promocion.value,
+        promocion: datos.promocion || promocion.value,
         propuestaVisual: datos.resultado
       })
     });
