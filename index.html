@@ -262,10 +262,26 @@ text-decoration: none;
       id="promocion"
       placeholder="Ejemplo: 30% de descuento en todos los zapatos este fin de semana..."
     ></textarea>
+    
+<div class="brand-kit">
+<label for="nombreNegocio">Nombre del negocio</label>
+<input
+  type="text"
+  id="nombreNegocio"
+  placeholder="Ejemplo: Café Aurora"
+>
 
-    <button onclick="generarCampana()">
-      ✦ Generar campaña
-    </button>
+<label for="logoNegocio">Logotipo del negocio (opcional)</label>
+<input
+  type="file"
+  id="logoNegocio"
+  accept="image/png,image/jpeg,image/webp"
+>
+</div>
+
+<button onclick="generarCampana()">
+  ✦ Generar campaña
+</button>
 
     <div id="resultado"></div>
 
