@@ -313,7 +313,7 @@ async function generarCampana() {
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ promocion })
+      body: JSON.stringify({ promocion, nombreNegocio })
     });
 
     const datos = await respuesta.json();
