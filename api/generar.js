@@ -4,7 +4,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { promocion, nombreNegocio } = req.body;
+    const { promocion, nombreNegocio, logoBase64 } = req.body;
     if (!promocion) {
       return res.status(400).json({
         error: "Escribe una promoción."
@@ -80,7 +80,7 @@ Haz que cada sección sea útil, específica y lista para utilizar.`
     ?.text ||
   "No se recibió contenido.";
 
-    const imagenRespuesta = await fetch(
+    let imagenRespuesta = await fetch(
   "https://api.openai.com/v1/images/generations",
   {
     method: "POST",
@@ -104,7 +104,59 @@ La imagen debe tener calidad publicitaria profesional, composición atractiva, i
   }
 );
 
+    if (logoBase64) {
+  const coincidencia = logoBase64.match(/^data:(image\/(?:png|jpeg|webp));base64,(.+)$/);
+
+  if (!coincidencia) {
+    return res.status(400).json({
+      error: "El logotipo debe ser PNG, JPG o WebP."
+    });
+  }
+
+  const tipoLogo = coincidencia[1];
+  const extension = tipoLogo === "image/jpeg" ? "jpg" : tipoLogo.split("/")[1];
+  const bytesLogo = Buffer.from(coincidencia[2], "base64");
+
+  const formulario = new FormData();
+  formulario.append("model", "gpt-image-2");
+  formulario.append(
+    "prompt",
+    `Crea una imagen publicitaria profesional para esta campaña:
+
+${promocion}
+
+Nombre del negocio: ${nombreNegocio || "No especificado"}
+
+Dirección creativa:
+${texto}
+
+Usa el logotipo proporcionado como identidad visual oficial del negocio.
+Conserva fielmente su diseño, texto, colores, formas y proporciones.
+Integra el logotipo de manera natural y claramente visible en la pieza publicitaria.
+No inventes, sustituyas ni rediseñes el logotipo.`
+  );
+  formulario.append("size", "1024x1024");
+  formulario.append(
+    "image[]",
+    new Blob([bytesLogo], { type: tipoLogo }),
+    `logo.${extension}`
+  );
+
+  imagenRespuesta = await fetch(
+    "https://api.openai.com/v1/images/edits",
+    {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`
+      },
+      body: formulario
+    }
+  );
+}
+
 const imagenDatos = await imagenRespuesta.json();
+
+    
 
 if (!imagenRespuesta.ok) {
   console.error("Error generando imagen:", imagenDatos);
