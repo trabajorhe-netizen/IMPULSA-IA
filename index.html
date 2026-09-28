@@ -297,6 +297,20 @@ text-decoration: none;
 async function generarCampana() {
   const promocion = document.getElementById("promocion").value.trim();
     const nombreNegocio = document.getElementById("nombreNegocio").value.trim();
+
+  const logoInput = document.getElementById("logoNegocio");
+const logoArchivo = logoInput.files[0];
+let logoBase64 = null;
+
+if (logoArchivo) {
+  logoBase64 = await new Promise((resolve, reject) => {
+    const lector = new FileReader();
+    lector.onload = () => resolve(lector.result);
+    lector.onerror = reject;
+    lector.readAsDataURL(logoArchivo);
+  });
+}
+  
   const resultado = document.getElementById("resultado");
 
   if (!promocion) {
@@ -314,7 +328,7 @@ async function generarCampana() {
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ promocion, nombreNegocio })
+      body: JSON.stringify({ promocion, nombreNegocio, logoBase64 })
     });
 
     const datos = await respuesta.json();
