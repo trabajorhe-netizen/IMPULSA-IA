@@ -4,8 +4,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { promocion } = req.body;
-
+    const { promocion, nombreNegocio } = req.body;
     if (!promocion) {
       return res.status(400).json({
         error: "Escribe una promoción."
@@ -25,6 +24,8 @@ export default async function handler(req, res) {
           input: `Eres el motor de marketing de IMPULSA IA.
 
 Crea una campaña publicitaria profesional en español para:
+Nombre del negocio: ${nombreNegocio || "No especificado"}
+Promoción:
 
 ${promocion}
 
