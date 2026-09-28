@@ -29,6 +29,11 @@ Promoción:
 
 ${promocion}
 
+REGLA IMPORTANTE SOBRE EL NOMBRE DEL NEGOCIO:
+Si se proporcionó un nombre del negocio, debes utilizarlo explícitamente en la campaña.
+Incluye el nombre del negocio de forma natural en el título o texto publicitario, en la publicación para redes sociales y en la propuesta visual.
+No sustituyas el nombre por expresiones genéricas como "nuestra cafetería", "nuestro negocio" o "nuestra tienda".
+
 Entrega exactamente estas 7 secciones, usando cada encabezado con ###:
 
 ### 1. Título de campaña
