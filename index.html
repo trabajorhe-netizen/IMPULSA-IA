@@ -277,6 +277,13 @@ text-decoration: none;
   id="logoNegocio"
   accept="image/png,image/jpeg,image/webp"
 >
+  <label style="display:flex; align-items:center; gap:8px; margin-top:10px; cursor:pointer;">
+  <input
+    type="checkbox"
+    id="eliminarFondoLogo"
+  >
+  Eliminar fondo blanco del logotipo
+</label>
 </div>
 
 <button onclick="generarCampana()">
@@ -300,6 +307,7 @@ async function generarCampana() {
 
   const logoInput = document.getElementById("logoNegocio");
 const logoArchivo = logoInput.files[0];
+  const eliminarFondoLogo = document.getElementById("eliminarFondoLogo").checked;
 let logoBase64 = null;
 
 if (logoArchivo) {
@@ -310,7 +318,52 @@ if (logoArchivo) {
     lector.readAsDataURL(logoArchivo);
   });
 }
-  
+
+  if (logoBase64 && eliminarFondoLogo) {
+  logoBase64 = await new Promise((resolve, reject) => {
+    const imagenLogo = new Image();
+
+    imagenLogo.onload = () => {
+      const canvasLogo = document.createElement("canvas");
+      canvasLogo.width = imagenLogo.naturalWidth;
+      canvasLogo.height = imagenLogo.naturalHeight;
+
+      const ctxLogo = canvasLogo.getContext("2d");
+      ctxLogo.drawImage(imagenLogo, 0, 0);
+
+      const imagenDatos = ctxLogo.getImageData(
+        0,
+        0,
+        canvasLogo.width,
+        canvasLogo.height
+      );
+
+      const pixeles = imagenDatos.data;
+
+      for (let i = 0; i < pixeles.length; i += 4) {
+        const r = pixeles[i];
+        const g = pixeles[i + 1];
+        const b = pixeles[i + 2];
+
+        const max = Math.max(r, g, b);
+        const min = Math.min(r, g, b);
+
+        // Solo elimina píxeles muy claros y casi neutros.
+        // Esto protege colores claros que sí pertenecen al logotipo.
+        if (r > 235 && g > 235 && b > 235 && max - min < 15) {
+          pixeles[i + 3] = 0;
+        }
+      }
+
+      ctxLogo.putImageData(imagenDatos, 0, 0);
+
+      resolve(canvasLogo.toDataURL("image/png"));
+    };
+
+    imagenLogo.onerror = reject;
+    imagenLogo.src = logoBase64;
+  });
+}
   const resultado = document.getElementById("resultado");
 
   if (!promocion) {
