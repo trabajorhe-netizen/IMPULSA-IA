@@ -396,16 +396,66 @@ bloques.forEach(bloque => {
   const tarjetaImagen = document.createElement("div");
   tarjetaImagen.className = "resultado-card";
   tarjetaImagen.style.gridColumn = "1 / -1";
+const imagenFinal = document.createElement("canvas");
+imagenFinal.width = 1024;
+imagenFinal.height = 1024;
 
+const contexto = imagenFinal.getContext("2d");
+
+const imagenIA = new Image();
+imagenIA.src = `data:image/png;base64,${datos.imagen}`;
+
+await new Promise((resolve, reject) => {
+  imagenIA.onload = resolve;
+  imagenIA.onerror = reject;
+});
+
+contexto.drawImage(imagenIA, 0, 0, 1024, 1024);
+
+if (datos.logo) {
+  const logoOriginal = new Image();
+  logoOriginal.src = datos.logo;
+
+  await new Promise((resolve, reject) => {
+    logoOriginal.onload = resolve;
+    logoOriginal.onerror = reject;
+  });
+
+  const maxAncho = 260;
+  const maxAlto = 160;
+  const escala = Math.min(
+    maxAncho / logoOriginal.width,
+    maxAlto / logoOriginal.height,
+    1
+  );
+
+  const anchoLogo = logoOriginal.width * escala;
+  const altoLogo = logoOriginal.height * escala;
+
+  const margen = 45;
+  const x = 1024 - anchoLogo - margen;
+  const y = margen;
+
+  contexto.drawImage(
+    logoOriginal,
+    x,
+    y,
+    anchoLogo,
+    altoLogo
+  );
+}
+
+const imagenFinalBase64 = imagenFinal.toDataURL("image/png");
+      
   tarjetaImagen.innerHTML = `
     <h3>8. Imagen publicitaria generada</h3>
     <img
-      src="data:image/png;base64,${datos.imagen}"
+      src="${imagenFinalBase64}"
       alt="Imagen publicitaria generada por IMPULSA IA"
       style="width:100%; max-width:1024px; display:block; margin:20px auto 0; border-radius:14px;"
     >
     <a
-  href="data:image/png;base64,${datos.imagen}"
+  href="${imagenFinalBase64}"
   download="IMPULSA-IA-campana.png"
   class="copiar-btn"
   style="display:inline-block; text-decoration:none; margin-top:10px;"
@@ -436,9 +486,10 @@ regenerarBtn.addEventListener("click", async () => {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        promocion: datos.promocion || promocion.value,
-        propuestaVisual: datos.resultado
-      })
+  promocion: datos.promocion || promocion.value,
+  propuestaVisual: datos.resultado,
+  logo: datos.logo || null
+})
     });
 
     const nuevaImagen = await respuestaImagen.json();
@@ -450,8 +501,67 @@ regenerarBtn.addEventListener("click", async () => {
     const img = tarjetaImagen.querySelector("img");
     const enlaceDescarga = tarjetaImagen.querySelector("a");
 
-    img.src = `data:image/png;base64,${nuevaImagen.imagen}`;
-    enlaceDescarga.href = `data:image/png;base64,${nuevaImagen.imagen}`;
+    const canvasRegenerado = document.createElement("canvas");
+canvasRegenerado.width = 1024;
+canvasRegenerado.height = 1024;
+
+const contextoRegenerado = canvasRegenerado.getContext("2d");
+
+const imagenRegeneradaIA = new Image();
+imagenRegeneradaIA.src = `data:image/png;base64,${nuevaImagen.imagen}`;
+
+await new Promise((resolve, reject) => {
+  imagenRegeneradaIA.onload = resolve;
+  imagenRegeneradaIA.onerror = reject;
+});
+
+contextoRegenerado.drawImage(
+  imagenRegeneradaIA,
+  0,
+  0,
+  1024,
+  1024
+);
+
+if (datos.logo) {
+  const logoRegenerado = new Image();
+  logoRegenerado.src = datos.logo;
+
+  await new Promise((resolve, reject) => {
+    logoRegenerado.onload = resolve;
+    logoRegenerado.onerror = reject;
+  });
+
+  const maxAncho = 260;
+  const maxAlto = 160;
+
+  const escala = Math.min(
+    maxAncho / logoRegenerado.width,
+    maxAlto / logoRegenerado.height,
+    1
+  );
+
+  const anchoLogo = logoRegenerado.width * escala;
+  const altoLogo = logoRegenerado.height * escala;
+
+  const margen = 45;
+  const x = 1024 - anchoLogo - margen;
+  const y = margen;
+
+  contextoRegenerado.drawImage(
+    logoRegenerado,
+    x,
+    y,
+    anchoLogo,
+    altoLogo
+  );
+}
+
+const imagenRegeneradaFinal =
+  canvasRegenerado.toDataURL("image/png");
+
+img.src = imagenRegeneradaFinal;
+enlaceDescarga.href = imagenRegeneradaFinal;
 
     regenerarBtn.textContent = "✓ Nueva imagen generada";
 
